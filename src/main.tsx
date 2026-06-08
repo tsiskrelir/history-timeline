@@ -9,6 +9,7 @@ type TimelineEvent = {
   start_year: number;
   end_year: number | null;
   region: RegionLane;
+  region: string;
   era: string;
   source: string;
   chapter: string;
@@ -41,6 +42,11 @@ const ALL = 'ყველა';
 const INCOMPLETE = 'ჯერ არ წაგვიკითხავს';
 
 const regionLanes: RegionLane[] = [
+
+const PROGRESS_KEY = 'history-timeline-progress-v1';
+const ALL = 'ყველა';
+
+const regionOrder = [
   'Middle East + North Africa',
   'Europe',
   'Georgia',
@@ -63,6 +69,7 @@ const eraBands = [
   { label: 'Stone Age', startYear: -2600000, endYear: -3300, className: 'stone' },
   { label: 'Bronze Age', startYear: -3300, endYear: -1200, className: 'bronze' },
   { label: 'Iron Age', startYear: -1200, endYear: 300, className: 'iron' },
+  'Global / Technology / Religion / Cross-regional events',
 ];
 
 function readProgress(): ProgressMap {
@@ -86,6 +93,9 @@ function useTimelineEvents() {
     fetch('/events.json')
       .then((response) => {
         if (!response.ok) throw new Error('events.json ვერ ჩაიტვირთა');
+        if (!response.ok) {
+          throw new Error('events.json ვერ ჩაიტვირთა');
+        }
         return response.json() as Promise<TimelineEvent[]>;
       })
       .then((data) => setEvents(data.sort((a, b) => a.start_year - b.start_year)))
@@ -145,6 +155,9 @@ function buildTicks(maxYear: number) {
   for (let year = 400; year <= maxYear; year += 100) ticks.push({ year, label: formatYearTick(year) });
 
   return ticks;
+function yearToPercent(year: number, minYear: number, maxYear: number) {
+  if (maxYear === minYear) return 0;
+  return ((year - minYear) / (maxYear - minYear)) * 100;
 }
 
 function fileToDataUrl(file: File): Promise<string> {
@@ -166,6 +179,9 @@ function App() {
   const [chapterFilter, setChapterFilter] = useState(ALL);
   const [chapterViewChapter, setChapterViewChapter] = useState('Prehistory');
   const [completionFilter, setCompletionFilter] = useState<CompletionFilter>(ALL);
+  const [regionFilter, setRegionFilter] = useState(ALL);
+  const [eraFilter, setEraFilter] = useState(ALL);
+  const [chapterFilter, setChapterFilter] = useState(ALL);
   const [search, setSearch] = useState('');
   const [notice, setNotice] = useState('');
 
@@ -185,6 +201,12 @@ function App() {
         completionFilter === ALL ||
         (completionFilter === 'წაკითხულია' && completed) ||
         (completionFilter === INCOMPLETE && !completed);
+  const filteredEvents = useMemo(() => {
+    const searchValue = search.trim().toLowerCase();
+    return events.filter((event) => {
+      const matchesRegion = regionFilter === ALL || event.region === regionFilter;
+      const matchesEra = eraFilter === ALL || event.era === eraFilter;
+      const matchesChapter = chapterFilter === ALL || event.chapter === chapterFilter;
       const matchesSearch =
         !searchValue ||
         event.title_ka.toLowerCase().includes(searchValue) ||
@@ -197,6 +219,19 @@ function App() {
   const maxEventYear = Math.max(1453, ...events.map((event) => event.end_year ?? event.start_year));
   const timelineWidth = yearToX(maxEventYear) + 360;
   const ticks = buildTicks(maxEventYear);
+      return matchesRegion && matchesEra && matchesChapter && matchesSearch;
+    });
+  }, [chapterFilter, eraFilter, events, regionFilter, search]);
+
+  const lanes = useMemo(() => {
+    const regions = Array.from(new Set([...regionOrder, ...filteredEvents.map((event) => event.region)]));
+    return regions
+      .map((region) => ({ region, events: filteredEvents.filter((event) => event.region === region) }))
+      .filter((lane) => lane.events.length > 0);
+  }, [filteredEvents]);
+
+  const minYear = Math.min(...filteredEvents.map((event) => event.start_year), -3500);
+  const maxYear = Math.max(...filteredEvents.map((event) => event.start_year), 500);
   const completedCount = Object.values(progress).filter((record) => record.completed).length;
 
   function persistRecord(record: ProgressRecord) {
@@ -230,6 +265,9 @@ function App() {
       const records = Array.isArray(payload) ? payload : payload.progress ?? [];
       const nextRecords = records.reduce<ProgressMap>((map, record) => {
         if (record.event_id) map[record.event_id] = record;
+        if (record.event_id) {
+          map[record.event_id] = record;
+        }
         return map;
       }, {});
       setProgress((current) => ({ ...current, ...nextRecords }));
@@ -251,6 +289,8 @@ function App() {
           <p className="hero-copy">
             დროის ღერძი განზრახ ნაწილებადაა გაშლილი: წინაისტორია შეკუმშულია, ძველი სამყარო საუკუნეებად,
             კლასიკური ხანა 50-წლიანი ნაბიჯებით, ხოლო 300 წლის შემდეგ უფრო დეტალურად ჩანს.
+            ჯერ ყველა მოვლენა ნაცრისფერია. წაკითხვის შემდეგ გახსენი ბარათი, დაწერე 1–2 წინადადება,
+            ატვირთე სტიკერი და გააფერადე შენი ისტორია.
           </p>
         </div>
         <div className="progress-card" aria-label="წაკითხული მოვლენების რაოდენობა">
@@ -284,6 +324,7 @@ function App() {
             </select>
           </label>
         )}
+      <section className="toolbar" aria-label="ფილტრები და პროგრესი">
         <label>
           რეგიონი
           <select value={regionFilter} onChange={(event) => setRegionFilter(event.target.value)}>
@@ -320,6 +361,14 @@ function App() {
             </select>
           </label>
         )}
+        <label>
+          თავი
+          <select value={chapterFilter} onChange={(event) => setChapterFilter(event.target.value)}>
+            {uniqueOptions(events, 'chapter').map((option) => (
+              <option key={option}>{option}</option>
+            ))}
+          </select>
+        </label>
         <label className="search-label">
           ძებნა
           <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="სათაური ან თავი" />
@@ -350,6 +399,76 @@ function App() {
       )}
 
       {viewMode === 'parent' && <ParentDataView events={filteredEvents} progress={progress} />}
+      <section className="timeline-card" aria-label="დროის ხაზი">
+        <div className="timeline-scroll">
+          <div className="timeline-grid" style={{ minWidth: `${Math.max(1200, filteredEvents.length * 155)}px` }}>
+            <div className="axis" aria-hidden="true">
+              <span>{Math.abs(minYear).toLocaleString('ka-GE')} ძვ. წ.</span>
+              <span>0</span>
+              <span>{maxYear.toLocaleString('ka-GE')} წ.</span>
+            </div>
+            {lanes.map((lane) => (
+              <div className="lane" key={lane.region}>
+                <div className="lane-label">{lane.region}</div>
+                <div className="lane-track">
+                  {lane.events.map((event) => {
+                    const record = progress[event.id];
+                    const completed = Boolean(record?.completed);
+                    return (
+                      <button
+                        className={`event-bubble ${completed ? 'completed' : 'inactive'}`}
+                        key={event.id}
+                        onClick={() => setSelectedEvent(event)}
+                        style={{ left: `${yearToPercent(event.start_year, minYear, maxYear)}%` }}
+                        type="button"
+                      >
+                        {completed && record?.uploaded_image ? (
+                          <img alt="ატვირთული სტიკერი" src={record.uploaded_image} />
+                        ) : (
+                          <span className="placeholder-icon">✦</span>
+                        )}
+                        <strong>{event.title_ka}</strong>
+                        <small>{event.date_label_ka}</small>
+                        <em>{completed ? '✓ წაკითხულია' : 'ჯერ არ წაგვიკითხავს'}</em>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="parent-view" aria-label="მშობლის მონაცემების ცხრილი">
+        <h2>მშობლის / მონაცემების ხედი</h2>
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>სათაური</th>
+                <th>თარიღი</th>
+                <th>რეგიონი</th>
+                <th>ეპოქა</th>
+                <th>თავი</th>
+                <th>სტატუსი</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredEvents.map((event) => (
+                <tr key={event.id}>
+                  <td>{event.title_ka}</td>
+                  <td>{event.date_label_ka}</td>
+                  <td>{event.region}</td>
+                  <td>{event.era}</td>
+                  <td>{event.chapter}</td>
+                  <td>{progress[event.id]?.completed ? 'წაკითხულია' : 'ჯერ არ წაგვიკითხავს'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       {selectedEvent && (
         <EventModal
