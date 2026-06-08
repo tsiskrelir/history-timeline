@@ -69,7 +69,7 @@ h1 {
 }
 
 .hero-copy {
-  max-width: 840px;
+  max-width: 920px;
   font-size: 1.13rem;
   line-height: 1.7;
 }
@@ -138,7 +138,8 @@ textarea {
 
 .primary-button,
 .secondary-button,
-.import-button {
+.import-button,
+.print-button {
   min-height: 48px;
   border: 0;
   border-radius: 999px;
@@ -155,6 +156,11 @@ textarea {
 .secondary-button,
 .import-button {
   background: #2f5d62;
+  color: #ffffff;
+}
+
+.print-button {
+  background: #6d4c41;
   color: #ffffff;
 }
 
@@ -185,47 +191,55 @@ textarea {
   overflow: hidden;
 }
 
-.timeline-scroll {
-  overflow-x: auto;
-  padding: 0 0 16px;
-}
-
-.timeline-grid {
+.timeline-layout {
   position: relative;
-  padding: 18px 24px 26px 216px;
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  min-height: 1580px;
 }
 
-.axis {
+.left-header {
   position: sticky;
   left: 0;
-  z-index: 3;
-  display: flex;
-  justify-content: space-between;
-  margin-left: 0;
-  padding: 10px 20px 10px 0;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  min-height: 132px;
+  border-right: 3px solid #f0dec0;
   border-bottom: 3px solid #e0cda8;
-  color: #6c6252;
-  font-weight: 800;
+  background: #fff8ec;
+  color: #1c3f44;
+  font-weight: 900;
 }
 
-.lane {
-  display: grid;
-  grid-template-columns: 190px 1fr;
-  min-height: 185px;
-  border-bottom: 2px dashed #e3d5bd;
+.timeline-scroll {
+  overflow-x: auto;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.time-canvas {
+  position: relative;
+  min-height: 1580px;
+  padding-top: 0;
+}
+
+.lane-label-column {
+  position: sticky;
+  left: 0;
+  z-index: 7;
+  grid-column: 1;
+  grid-row: 2;
+  background: #fff8ec;
 }
 
 .lane-label {
-  position: sticky;
-  left: 0;
-  z-index: 4;
   display: flex;
   align-items: center;
-  min-height: 185px;
-  margin-left: -216px;
+  min-height: 200px;
   padding: 16px;
   border-right: 3px solid #f0dec0;
-  background: #fff8ec;
+  border-bottom: 2px dashed #e3d5bd;
   color: #1c3f44;
   font-weight: 900;
 }
@@ -320,6 +334,7 @@ textarea {
 }
 
 .parent-view h2 {
+  margin-bottom: 8px;
   margin-bottom: 14px;
 }
 

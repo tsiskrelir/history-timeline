@@ -6,8 +6,14 @@ Interactive Georgian-language homeschool world history timeline prototype.
 
 - React + Vite + TypeScript app shell.
 - Timeline events loaded from `public/events.json` so parents can edit data without changing app code.
-- Horizontal timeline with geography lanes and year-based event positioning.
-- Gray inactive cards by default.
+- Horizontal timeline with fixed geography lane labels on the left and a horizontally scrollable time area on the right.
+- Piecewise time scale instead of a single compressed chart:
+  - compressed `Prehistory / Stone Age` block for events earlier than 3500 BCE;
+  - 100-year spacing from 3500 BCE to 500 BCE;
+  - 50-year spacing from 500 BCE to 300 CE;
+  - 10-year spacing after 300 CE.
+- Top age bands for Stone Age, Bronze Age, and Iron Age.
+- Gray inactive event bubbles by default.
 - Clickable modal for Georgian summaries and sticker/image uploads.
 - Progress stored separately in browser `localStorage`.
 - Completed events become colorful and show the uploaded sticker.
