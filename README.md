@@ -18,8 +18,7 @@ Interactive Georgian-language homeschool world history timeline prototype.
 - Progress stored separately in browser `localStorage`.
 - Completed events become colorful and show the uploaded sticker.
 - Progress export/import using `history-progress.json`.
-- Three views: Timeline View, Chapter View, and Parent Data View.
-- Region, era, chapter, completion, and text filters.
+- Region, era, chapter, and text filters.
 - Parent/data table and print-friendly styling.
 
 ## Local development
@@ -43,16 +42,4 @@ Update `public/events.json`. Each event should keep these fields:
 id, title_ka, date_label_ka, start_year, end_year, region, era, source, chapter, default_icon
 ```
 
-Use astronomical-style years: negative `start_year` values for BCE dates and positive values for CE dates. For example, `-3500` means 3500 BCE and `476` means 476 CE.
-
-Use one of these region lanes exactly:
-
-```text
-Middle East + North Africa
-Europe
-Georgia
-Asia
-Americas
-Africa / Oceania / Other
-Global / Technology / Religion
-```
+Use negative `start_year` values for BCE dates, for example `-3500` for 3500 BCE.

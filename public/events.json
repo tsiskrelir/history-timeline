@@ -1,20 +1,8 @@
 [
   {
-    "id": "paleolithic-begins",
-    "title_ka": "პალეოლითის დასაწყისი",
-    "date_label_ka": "დაახლ. 2.6 მილიონი წლის წინ",
-    "start_year": -2600000,
-    "end_year": null,
-    "region": "Global / Technology / Religion",
-    "era": "Prehistory",
-    "source": "Starter sample data",
-    "chapter": "Prehistory",
-    "default_icon": null
-  },
-  {
-    "id": "dmanisi-hominins",
+    "id": "dmanisi-1800",
     "title_ka": "დმანისის ადამიანები",
-    "date_label_ka": "დაახლ. 1.8 მილიონი წლის წინ",
+    "date_label_ka": "ძვ. წ. 1,800,000",
     "start_year": -1800000,
     "end_year": null,
     "region": "Georgia",
@@ -32,6 +20,7 @@
     "region": "Global / Technology / Religion",
     "era": "Prehistory",
     "source": "Starter sample data",
+    "source": "Sample starter data",
     "chapter": "Prehistory",
     "default_icon": null
   },
@@ -88,6 +77,22 @@
     "title_ka": "სარგონ დიდი",
     "date_label_ka": "დაახლ. ძვ. წ. 2334",
     "start_year": -2334,
+    "id": "indus-valley-2600",
+    "title_ka": "ინდუსის ცივილიზაცია",
+    "date_label_ka": "ძვ. წ. 2600",
+    "start_year": -2600,
+    "end_year": null,
+    "region": "Asia",
+    "era": "Ancient",
+    "source": "Sample starter data",
+    "chapter": "India",
+    "default_icon": null
+  },
+  {
+    "id": "great-pyramid-2560",
+    "title_ka": "გიზის დიდი პირამიდა",
+    "date_label_ka": "ძვ. წ. 2560",
+    "start_year": -2560,
     "end_year": null,
     "region": "Middle East + North Africa",
     "era": "Ancient",
@@ -177,6 +182,67 @@
     "era": "Ancient",
     "source": "History Quest / TGTB",
     "chapter": "China",
+    "chapter": "Ancient Egypt",
+    "default_icon": null
+  },
+  {
+    "id": "writing-begins-3200",
+    "title_ka": "წერის დასაწყისი",
+    "date_label_ka": "ძვ. წ. 3200",
+    "start_year": -3200,
+    "end_year": null,
+    "region": "Global / Technology / Religion / Cross-regional events",
+    "era": "Ancient",
+    "source": "Sample starter data",
+    "chapter": "Mesopotamia",
+    "default_icon": null
+  },
+  {
+    "id": "olmecs-1200",
+    "title_ka": "ოლმეკები",
+    "date_label_ka": "ძვ. წ. 1200",
+    "start_year": -1200,
+    "end_year": null,
+    "region": "Americas",
+    "era": "Ancient",
+    "source": "Sample starter data",
+    "chapter": "Mesoamerica",
+    "default_icon": null
+  },
+  {
+    "id": "first-olympics-776",
+    "title_ka": "პირველი ოლიმპიური თამაშები",
+    "date_label_ka": "ძვ. წ. 776",
+    "start_year": -776,
+    "end_year": null,
+    "region": "Europe",
+    "era": "Ancient",
+    "source": "History Quest / TGTB",
+    "chapter": "Greek Timeline",
+    "default_icon": null
+  },
+  {
+    "id": "rome-founded-753",
+    "title_ka": "რომის დაარსება",
+    "date_label_ka": "ძვ. წ. 753",
+    "start_year": -753,
+    "end_year": null,
+    "region": "Europe",
+    "era": "Ancient",
+    "source": "History Quest / TGTB",
+    "chapter": "Roman History",
+    "default_icon": null
+  },
+  {
+    "id": "constantinople-330",
+    "title_ka": "კონსტანტინოპოლი",
+    "date_label_ka": "330 წ.",
+    "start_year": 330,
+    "end_year": null,
+    "region": "Europe",
+    "era": "Medieval",
+    "source": "History Quest / TGTB",
+    "chapter": "Byzantine Empire",
     "default_icon": null
   }
 ]
